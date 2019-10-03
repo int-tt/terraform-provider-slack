@@ -22,7 +22,7 @@ const (
 )
 
 // Diagnostic represents information to be presented to a user about an
-// error or anomoly in parsing or evaluating configuration.
+// error or anomaly in parsing or evaluating configuration.
 type Diagnostic struct {
 	Severity DiagnosticSeverity
 

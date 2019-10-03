@@ -141,7 +141,7 @@ type LoggerOptions struct {
 	// Name of the subsystem to prefix logs with
 	Name string
 
-	// The threshold for the logger. Anything less severe is supressed
+	// The threshold for the logger. Anything less severe is suppressed
 	Level Level
 
 	// Where to write the logs to. Defaults to os.Stderr if nil

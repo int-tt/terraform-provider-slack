@@ -35,7 +35,7 @@ this means it may break without warning in the future.
 ### v0.3.0 - July 30, 2018
 full differences can be viewed using `git log --oneline --decorate --color v0.2.0..v0.3.0`
 - slack events initial support added. (still considered experimental and undergoing changes, stability not promised)
-- vendored depedencies using dep, ensure using up to date tooling before filing issues.
+- vendored dependencies using dep, ensure using up to date tooling before filing issues.
 - RTM has improved its ability to identify dead connections and reconnect automatically (worth calling out in case it has unintended side effects).
 - bug fixes (various timestamp handling, error handling, RTM locking, etc).
 

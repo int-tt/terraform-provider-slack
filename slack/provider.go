@@ -11,14 +11,16 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"slack_token": {
+			"token": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
 		},
-		ResourcesMap:   nil,
+		ResourcesMap: map[string]*schema.Resource{
+			"slack_channel": resourceChannel(),
+		},
 		DataSourcesMap: nil,
-		ConfigureFunc:  nil,
+		ConfigureFunc:  providerConfigure,
 		MetaReset:      nil,
 	}
 }
@@ -27,7 +29,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	c := cleanhttp.DefaultClient()
 	c.Transport = logging.NewTransport("Slack", c.Transport)
 	client := slackapi.New(
-		d.Get("slack_token").(string),
+		d.Get("token").(string),
 		slackapi.OptionHTTPClient(c),
 	)
 	return client, nil

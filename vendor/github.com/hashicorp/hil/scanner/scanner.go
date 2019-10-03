@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/hil/ast"
 )
 
-// Scan returns a channel that recieves Tokens from the given input string.
+// Scan returns a channel that receives Tokens from the given input string.
 //
 // The scanner's job is just to partition the string into meaningful parts.
 // It doesn't do any transformation of the raw input string, so the caller

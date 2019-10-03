@@ -116,7 +116,7 @@ func unifyObjectTypes(types []cty.Type, unsafe bool, hasDynamic bool) (cty.Type,
 	// unification use-cases: it makes sense to allow {"foo":true} to convert
 	// to emptyobjectval, but unifying an object with an attribute with the
 	// empty object type should be an error because unifying to the empty
-	// object type would be suprising and useless.
+	// object type would be surprising and useless.
 
 	firstAttrs := types[0].AttributeTypes()
 	for _, ty := range types[1:] {

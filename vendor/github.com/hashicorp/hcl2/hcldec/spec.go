@@ -492,7 +492,7 @@ func (s *BlockListSpec) decode(content *hcl.BodyContent, blockLabels []blockLabe
 			// FIXME: This is a pretty terrible error message.
 			diags = append(diags, &hcl.Diagnostic{
 				Severity: hcl.DiagError,
-				Summary:  fmt.Sprintf("Unconsistent argument types in %s blocks", s.TypeName),
+				Summary:  fmt.Sprintf("Inconsistent argument types in %s blocks", s.TypeName),
 				Detail:   "Corresponding attributes in all blocks of this type must be the same.",
 				Subject:  &sourceRanges[0],
 			})
@@ -505,7 +505,7 @@ func (s *BlockListSpec) decode(content *hcl.BodyContent, blockLabels []blockLabe
 					// FIXME: This is a pretty terrible error message.
 					diags = append(diags, &hcl.Diagnostic{
 						Severity: hcl.DiagError,
-						Summary:  fmt.Sprintf("Unconsistent argument types in %s blocks", s.TypeName),
+						Summary:  fmt.Sprintf("Inconsistent argument types in %s blocks", s.TypeName),
 						Detail:   fmt.Sprintf("Block with index %d has inconsistent argument types: %s.", i, err),
 						Subject:  &sourceRanges[i],
 					})
@@ -766,7 +766,7 @@ func (s *BlockSetSpec) decode(content *hcl.BodyContent, blockLabels []blockLabel
 			// FIXME: This is a pretty terrible error message.
 			diags = append(diags, &hcl.Diagnostic{
 				Severity: hcl.DiagError,
-				Summary:  fmt.Sprintf("Unconsistent argument types in %s blocks", s.TypeName),
+				Summary:  fmt.Sprintf("Inconsistent argument types in %s blocks", s.TypeName),
 				Detail:   "Corresponding attributes in all blocks of this type must be the same.",
 				Subject:  &sourceRanges[0],
 			})
@@ -779,7 +779,7 @@ func (s *BlockSetSpec) decode(content *hcl.BodyContent, blockLabels []blockLabel
 					// FIXME: This is a pretty terrible error message.
 					diags = append(diags, &hcl.Diagnostic{
 						Severity: hcl.DiagError,
-						Summary:  fmt.Sprintf("Unconsistent argument types in %s blocks", s.TypeName),
+						Summary:  fmt.Sprintf("Inconsistent argument types in %s blocks", s.TypeName),
 						Detail:   fmt.Sprintf("Block with index %d has inconsistent argument types: %s.", i, err),
 						Subject:  &sourceRanges[i],
 					})

@@ -64,7 +64,7 @@ func (s *gRPCBrokerServer) StartStream(stream plugin.GRPCBroker_StartStreamServe
 	doneCh := stream.Context().Done()
 	defer s.Close()
 
-	// Proccess send stream
+	// Process send stream
 	go func() {
 		for {
 			select {

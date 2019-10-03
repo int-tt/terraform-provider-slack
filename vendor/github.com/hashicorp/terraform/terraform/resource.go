@@ -518,7 +518,7 @@ func (c *ResourceConfig) get(
 func (c *ResourceConfig) interpolateForce() {
 	if c.raw == nil {
 		// If we don't have a lowercase "raw" but we _do_ have the uppercase
-		// Raw populated then this indicates that we're recieving a shim
+		// Raw populated then this indicates that we're receiving a shim
 		// ResourceConfig created by NewResourceConfigShimmed, which is already
 		// fully evaluated and thus this function doesn't need to do anything.
 		if c.Raw != nil {
