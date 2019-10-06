@@ -11,6 +11,7 @@ import (
 )
 
 func TestAccSlackChannel_Basic(t *testing.T) {
+
 	channelName := fmt.Sprintf("tf_test_%s", acctest.RandString(10))
 
 	resource.Test(t, resource.TestCase{
@@ -20,6 +21,15 @@ func TestAccSlackChannel_Basic(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config: testAccChannelResourceConfig(channelName),
+			},
+			{
+				ResourceName: "slack_channel.test",
+				ImportState: true,
+				ImportStateVerify: true,
+			},
+			{
+				// Update test
+				Config: testAccChannelResourceConfig(fmt.Sprintf("%s_updated",channelName)),
 			},
 			{
 				ResourceName: "slack_channel.test",
