@@ -4,7 +4,7 @@ import (
 	"github.com/hashicorp/hcl2/hcl"
 )
 
-// Variables returns all of the variables referenced within a given expression.
+// Variables returns all of the variables referenced within a given experssion.
 //
 // This is the implementation of the "Variables" method on every native
 // expression.

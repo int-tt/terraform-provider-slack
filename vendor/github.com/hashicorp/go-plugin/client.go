@@ -896,7 +896,7 @@ func (c *Client) ReattachConfig() *ReattachConfig {
 
 // Protocol returns the protocol of server on the remote end. This will
 // start the plugin process if it isn't already started. Errors from
-// starting the plugin are suppressed and ProtocolInvalid is returned. It
+// starting the plugin are surpressed and ProtocolInvalid is returned. It
 // is recommended you call Start explicitly before calling Protocol to ensure
 // no errors occur.
 func (c *Client) Protocol() Protocol {

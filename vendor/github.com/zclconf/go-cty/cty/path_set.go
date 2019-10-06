@@ -66,7 +66,7 @@ func (s PathSet) List() []Path {
 	return ret
 }
 
-// Remove modifies the receiving set to no longer include the given path.
+// Remove modifies the receving set to no longer include the given path.
 // If the given path was already absent, this is a no-op.
 func (s PathSet) Remove(path Path) {
 	s.set.Remove(path)

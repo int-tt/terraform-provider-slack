@@ -18,11 +18,11 @@ import (
 // multiplex it into multiple streams.
 type Session struct {
 	// remoteGoAway indicates the remote side does
-	// not want further connections. Must be first for alignment.
+	// not want futher connections. Must be first for alignment.
 	remoteGoAway int32
 
 	// localGoAway indicates that we should stop
-	// accepting further connections. Must be first for alignment.
+	// accepting futher connections. Must be first for alignment.
 	localGoAway int32
 
 	// nextStreamID is the next stream we should
@@ -86,9 +86,14 @@ type sendReady struct {
 
 // newSession is used to construct a new session
 func newSession(config *Config, conn io.ReadWriteCloser, client bool) *Session {
+	logger := config.Logger
+	if logger == nil {
+		logger = log.New(config.LogOutput, "", log.LstdFlags)
+	}
+
 	s := &Session{
 		config:     config,
-		logger:     log.New(config.LogOutput, "", log.LstdFlags),
+		logger:     logger,
 		conn:       conn,
 		bufRead:    bufio.NewReader(conn),
 		pings:      make(map[uint32]chan struct{}),

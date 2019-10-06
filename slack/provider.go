@@ -2,18 +2,22 @@ package slack
 
 import (
 	"github.com/hashicorp/go-cleanhttp"
-	"github.com/hashicorp/terraform/helper/logging"
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/logging"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	slackapi "github.com/nlopes/slack"
 )
 
 //Provider is the root of terraform provider plugin
-func Provider() *schema.Provider {
-	return &schema.Provider{
+func Provider() terraform.ResourceProvider {
+	provider := &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"token": {
 				Type:     schema.TypeString,
 				Required: true,
+				DefaultFunc: schema.MultiEnvDefaultFunc([]string{
+					"SLACK_TOKEN",
+				},nil),
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
@@ -23,6 +27,8 @@ func Provider() *schema.Provider {
 		ConfigureFunc:  providerConfigure,
 		MetaReset:      nil,
 	}
+
+	return provider
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {

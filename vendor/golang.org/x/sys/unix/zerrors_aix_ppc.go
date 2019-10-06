@@ -76,7 +76,7 @@ const (
 	CAP_NUMA_ATTACH               = 0x2
 	CAP_PERMITTED                 = 0x3
 	CAP_PROPAGATE                 = 0x1
-	CAP_PROPAGATE                 = 0x1
+	CAP_PROPOGATE                 = 0x1
 	CAP_SET                       = 0x1
 	CBAUD                         = 0xf
 	CFLUSH                        = 0xf

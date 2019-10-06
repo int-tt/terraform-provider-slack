@@ -1,5 +1,5 @@
 provider "slack" {
-  token = "SLACK_TOKEN"
+  token = ""
 }
 
 resource "slack_channel" "test" {

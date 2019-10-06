@@ -111,9 +111,9 @@ func (val Value) Equals(other Value) Value {
 	case val.IsKnown() && !other.IsKnown():
 		switch {
 		case val.IsNull(), other.ty.HasDynamicTypes():
-			// If known is Null, we need to wait for the unknown value since
+			// If known is Null, we need to wait for the unkown value since
 			// nulls of any type are equal.
-			// An unknown with a dynamic type compares as unknown, which we need
+			// An unkown with a dynamic type compares as unknown, which we need
 			// to check before the type comparison below.
 			return UnknownVal(Bool)
 		case !val.ty.Equals(other.ty):
@@ -126,9 +126,9 @@ func (val Value) Equals(other Value) Value {
 	case other.IsKnown() && !val.IsKnown():
 		switch {
 		case other.IsNull(), val.ty.HasDynamicTypes():
-			// If known is Null, we need to wait for the unknown value since
+			// If known is Null, we need to wait for the unkown value since
 			// nulls of any type are equal.
-			// An unknown with a dynamic type compares as unknown, which we need
+			// An unkown with a dynamic type compares as unknown, which we need
 			// to check before the type comparison below.
 			return UnknownVal(Bool)
 		case !other.ty.Equals(val.ty):
@@ -625,7 +625,7 @@ func (val Value) GetAttr(name string) Value {
 // either a list, map or tuple type. This method will panic if the receiver
 // type is not compatible.
 //
-// The key value must be the correct type for the receiving collection: a
+// The key value must be the correct type for the receving collection: a
 // number if the collection is a list or tuple, or a string if it is a map.
 // In the case of a list or tuple, the given number must be convertable to int
 // or this method will panic. The key may alternatively be of

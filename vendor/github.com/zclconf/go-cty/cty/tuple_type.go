@@ -86,7 +86,7 @@ func (t Type) IsTupleType() bool {
 }
 
 // Length returns the number of elements of the receiving tuple type.
-// Will panic if the receiver isn't a tuple type; use IsTupleType to determine
+// Will panic if the reciever isn't a tuple type; use IsTupleType to determine
 // whether this operation will succeed.
 func (t Type) Length() int {
 	if ot, ok := t.typeImpl.(typeTuple); ok {
@@ -105,7 +105,7 @@ func (t Type) TupleElementType(idx int) Type {
 	panic("TupleElementType on non-tuple Type")
 }
 
-// TupleElementTypes returns a slice of the receiving tuple type's element
+// TupleElementTypes returns a slice of the recieving tuple type's element
 // types. Will panic if the receiver is not a tuple type (use IsTupleType
 // to confirm).
 //

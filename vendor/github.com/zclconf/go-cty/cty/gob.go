@@ -79,7 +79,7 @@ func (t Type) GobEncode() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// GobDecode is an implementations of the gob.GobDecoder interface, which
+// GobDecode is an implementatino of the gob.GobDecoder interface, which
 // reverses the encoding performed by GobEncode to allow types to be recovered
 // from gob buffers.
 func (t *Type) GobDecode(buf []byte) error {

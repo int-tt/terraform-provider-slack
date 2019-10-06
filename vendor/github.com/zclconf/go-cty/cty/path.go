@@ -36,7 +36,7 @@ func (p pathStepImpl) pathStepSigil() pathStepImpl {
 	return p
 }
 
-// Index returns a new Path that is the receiver with an IndexStep appended
+// Index returns a new Path that is the reciever with an IndexStep appended
 // to the end.
 //
 // This is provided as a convenient way to construct paths, but each call
@@ -56,7 +56,7 @@ func IndexPath(v Value) Path {
 	return Path{}.Index(v)
 }
 
-// GetAttr returns a new Path that is the receiver with a GetAttrStep appended
+// GetAttr returns a new Path that is the reciever with a GetAttrStep appended
 // to the end.
 //
 // This is provided as a convenient way to construct paths, but each call

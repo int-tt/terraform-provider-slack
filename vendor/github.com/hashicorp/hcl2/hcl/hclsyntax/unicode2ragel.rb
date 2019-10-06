@@ -281,7 +281,7 @@ def is_valid?( range, desc, codes )
 end
 
 ##
-# Generate the state machine to stdout
+# Generate the state maching to stdout
 
 def generate_machine( name, property )
   pipe = " "

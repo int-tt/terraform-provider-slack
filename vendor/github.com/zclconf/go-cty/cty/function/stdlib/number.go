@@ -374,7 +374,7 @@ func Divide(a cty.Value, b cty.Value) (cty.Value, error) {
 	return DivideFunc.Call([]cty.Value{a, b})
 }
 
-// Negate returns the given number multiplied by -1.
+// Negate returns the given number multipled by -1.
 func Negate(num cty.Value) (cty.Value, error) {
 	return NegateFunc.Call([]cty.Value{num})
 }
