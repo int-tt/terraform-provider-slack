@@ -36,7 +36,7 @@ func resourceChannelCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceChannelRead(d *schema.ResourceData, meta interface{}) error {
-	channel, err := meta.(*slackapi.Client).GetChannelInfo(d.Id());
+	channel, err := meta.(*slackapi.Client).GetChannelInfo(d.Id())
 	if err != nil {
 		return fmt.Errorf("failed to read channel: %s", err.Error())
 	}
@@ -63,9 +63,9 @@ func resourceChannelDelete(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 
-func resourceChannelImport(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData,error){
-	if err := resourceChannelRead(d, meta); err != nil{
-		return nil ,err
+func resourceChannelImport(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	if err := resourceChannelRead(d, meta); err != nil {
+		return nil, err
 	}
 	return []*schema.ResourceData{d}, nil
 }

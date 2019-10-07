@@ -8,9 +8,11 @@ import (
 )
 
 var testAccProviders map[string]terraform.ResourceProvider
+
 //var testAccProviderFactories func(providers *[]*schema.Provider) map[string]terraform.ResourceProviderFactory
 
 var testAccProvider *schema.Provider
+
 //var testAccProviderFunc func() *schema.Provider
 
 func init() {
@@ -18,19 +20,19 @@ func init() {
 	testAccProviders = map[string]terraform.ResourceProvider{
 		"slack": testAccProvider,
 	}
-/*	testAccProviderFactories = func(providers *[]*schema.Provider) map[string]terraform.ResourceProviderFactory {
-		return map[string]terraform.ResourceProviderFactory{
-			"slack": func() (terraform.ResourceProvider, error) {
-				p := Provider()
-				*providers = append(*providers, p)
-				return p, nil
-			},
+	/*	testAccProviderFactories = func(providers *[]*schema.Provider) map[string]terraform.ResourceProviderFactory {
+			return map[string]terraform.ResourceProviderFactory{
+				"slack": func() (terraform.ResourceProvider, error) {
+					p := Provider()
+					*providers = append(*providers, p)
+					return p, nil
+				},
+			}
 		}
-	}
 
 
-	testAccProviderFunc = func() *schema.Provider { return testAccProvider }
-*/
+		testAccProviderFunc = func() *schema.Provider { return testAccProvider }
+	*/
 }
 
 func TestProvider(t *testing.T) {

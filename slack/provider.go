@@ -17,7 +17,7 @@ func Provider() terraform.ResourceProvider {
 				Required: true,
 				DefaultFunc: schema.MultiEnvDefaultFunc([]string{
 					"SLACK_TOKEN",
-				},nil),
+				}, nil),
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{

@@ -23,17 +23,17 @@ func TestAccSlackChannel_Basic(t *testing.T) {
 				Config: testAccChannelResourceConfig(channelName),
 			},
 			{
-				ResourceName: "slack_channel.test",
-				ImportState: true,
+				ResourceName:      "slack_channel.test",
+				ImportState:       true,
 				ImportStateVerify: true,
 			},
 			{
 				// Update test
-				Config: testAccChannelResourceConfig(fmt.Sprintf("%s_updated",channelName)),
+				Config: testAccChannelResourceConfig(fmt.Sprintf("%s_updated", channelName)),
 			},
 			{
-				ResourceName: "slack_channel.test",
-				ImportState: true,
+				ResourceName:      "slack_channel.test",
+				ImportState:       true,
 				ImportStateVerify: true,
 			},
 		},
@@ -55,7 +55,7 @@ func testAccCheckChannelDestroy(s *terraform.State) error {
 		}
 		config := testAccProvider.Meta().(*slackapi.Client)
 		channel, err := config.GetChannelInfo(rs.Primary.ID)
-		if err != nil{
+		if err != nil {
 			return err
 		}
 		if !channel.IsArchived {
