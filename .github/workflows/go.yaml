@@ -5,14 +5,12 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - &prepare-job
-        name: Set up Go 1.13
+      - name: Set up Go 1.13
         uses: actions/setup-go@v1
         with:
           go-version: 1.13
         id: go
-      - &checkout
-        name: Check out code into the Go module directory
+      - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: fmtcheck
         run: make fmtcheck
@@ -20,8 +18,13 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - *prepare-job
-      - *checkout
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
       - name: test
         run: mate test
       - name: testacc
@@ -29,10 +32,15 @@ jobs:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
         run: make testacc
   build:
-    name: test
+    name: build
     runs-on: ubuntu-latest
     steps:
-      - *prepare-job
-      - *checkout
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
       - name: Build
         run: make build
