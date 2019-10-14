@@ -1,6 +1,10 @@
 package slack
 
-import "github.com/hashicorp/terraform/helper/schema"
+import (
+	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	slackapi "github.com/nlopes/slack"
+)
 
 func dataSourceUser() *schema.Resource {
 	return &schema.Resource{
@@ -9,18 +13,31 @@ func dataSourceUser() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"team_id": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"name": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"real_name": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 		},
-		SchemaVersion:      0,
-		MigrateState:       nil,
-		StateUpgraders:     nil,
-		Create:             nil,
-		Read:               nil,
-		Update:             nil,
-		Delete:             nil,
-		Exists:             nil,
-		CustomizeDiff:      nil,
-		Importer:           nil,
-		DeprecationMessage: "",
-		Timeouts:           nil,
+		Read: dataSourceUserRead,
 	}
+}
+
+func dataSourceUserRead(d *schema.ResourceData, meta interface{}) error {
+	user, err := meta.(*slackapi.Client).GetUserInfo(d.Get("id").(string))
+	if err != nil {
+		return fmt.Errorf("faild to get user: %s", err.Error())
+	}
+	d.SetId(user.ID)
+	d.Set("team_id", user.TeamID)
+	d.Set("name", user.Name)
+	d.Set("real_name", user.RealName)
+	return nil
 }
