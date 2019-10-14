@@ -23,7 +23,9 @@ func Provider() terraform.ResourceProvider {
 		ResourcesMap: map[string]*schema.Resource{
 			"slack_channel": resourceChannel(),
 		},
-		DataSourcesMap: nil,
+		DataSourcesMap: map[string]*schema.Resource{
+			"slack_user": dataSourceUser(),
+		},
 		ConfigureFunc:  providerConfigure,
 		MetaReset:      nil,
 	}
