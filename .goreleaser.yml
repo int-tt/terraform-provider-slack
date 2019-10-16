@@ -10,12 +10,12 @@ builds:
     goarch:
       - amd64
       - 386
-archive:
-  format: tar.gz
-  format_overrides:
-    - goos: windows
-      format: zip
-  name_template: "{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}"
+archives:
+  - format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: "{{.ProjectName}}_v{{.Version}}_{{.Os}}-{{.Arch}}"
 release:
   github:
     owner: int-tt
