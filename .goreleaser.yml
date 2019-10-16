@@ -1,0 +1,22 @@
+project_name: terraform-provider-slack
+builds:
+  - binary: terraform-slack-provider
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - 386
+archive:
+  format: tar.gz
+  format_overrides:
+    - goos: windows
+      format: zip
+  name_template: "{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}"
+release:
+  github:
+    owner: int-tt
+    name: terraform-provider-slack
