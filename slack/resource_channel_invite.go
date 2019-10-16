@@ -22,18 +22,11 @@ func resourceChannelInvite() *schema.Resource {
 				Computed: true,
 			},
 		},
-		SchemaVersion:      0,
-		MigrateState:       nil,
-		StateUpgraders:     nil,
-		Create:             resourceChannelInviteCreate,
-		Read:               resourceChannelInviteRead,
-		Update:             resourceChannelInviteUpdate,
-		Delete:             resourceChannelInviteDelete,
-		Exists:             nil,
-		CustomizeDiff:      nil,
-		Importer:           &schema.ResourceImporter{State: resourceChannelInviteImport},
-		DeprecationMessage: "",
-		Timeouts:           nil,
+		Create:   resourceChannelInviteCreate,
+		Read:     resourceChannelInviteRead,
+		Update:   resourceChannelInviteUpdate,
+		Delete:   resourceChannelInviteDelete,
+		Importer: &schema.ResourceImporter{State: resourceChannelInviteImport},
 	}
 }
 
@@ -52,14 +45,15 @@ func resourceChannelInviteRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return fmt.Errorf("failed to read channel:%s", err.Error())
 	}
-	isJoin := false
+	isJoin := "false"
 	for _, member := range channel.Members {
 		if member == userID {
-			isJoin = true
+			isJoin = "true"
 			break
 		}
 	}
-	d.Set("is_join", isJoin)
+
+	d.SetId(isJoin)
 	return nil
 }
 
@@ -77,6 +71,10 @@ func resourceChannelInviteDelete(d *schema.ResourceData, meta interface{}) error
 }
 
 func resourceChannelInviteImport(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	if err := resourceChannelInviteRead(d, meta); err != nil {
+		return nil, err
+	}
+
 	return []*schema.ResourceData{d}, nil
 }
 
