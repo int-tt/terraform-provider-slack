@@ -26,6 +26,7 @@ func Provider() terraform.ResourceProvider {
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"slack_user": dataSourceUser(),
+			"slack_user_with_email": dataSourceUserWithEmail(),
 		},
 		ConfigureFunc:  providerConfigure,
 		MetaReset:      nil,

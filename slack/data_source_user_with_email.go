@@ -6,10 +6,10 @@ import (
 	slackapi "github.com/nlopes/slack"
 )
 
-func dataSourceUser() *schema.Resource {
+func dataSourceUserWithEmail() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
-			"id": {
+			"email": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
@@ -26,12 +26,12 @@ func dataSourceUser() *schema.Resource {
 				Computed: true,
 			},
 		},
-		Read: dataSourceUserRead,
+		Read: dataSourceUserWithEmailRead,
 	}
 }
 
-func dataSourceUserRead(d *schema.ResourceData, meta interface{}) error {
-	user, err := meta.(*slackapi.Client).GetUserInfo(d.Get("id").(string))
+func dataSourceUserWithEmailRead(d *schema.ResourceData, meta interface{}) error {
+	user, err := meta.(*slackapi.Client).GetUserByEmail(d.Get("email").(string))
 	if err != nil {
 		return fmt.Errorf("faild to get user: %s", err.Error())
 	}
