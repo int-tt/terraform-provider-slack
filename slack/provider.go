@@ -21,15 +21,15 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"slack_channel": resourceChannel(),
+			"slack_channel":        resourceChannel(),
 			"slack_channel_invite": resourceChannelInvite(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"slack_user": dataSourceUser(),
+			"slack_user":            dataSourceUser(),
 			"slack_user_with_email": dataSourceUserWithEmail(),
 		},
-		ConfigureFunc:  providerConfigure,
-		MetaReset:      nil,
+		ConfigureFunc: providerConfigure,
+		MetaReset:     nil,
 	}
 
 	return provider

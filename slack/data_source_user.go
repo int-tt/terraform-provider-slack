@@ -35,7 +35,7 @@ func dataSourceUserRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return fmt.Errorf("faild to get user: %s", err.Error())
 	}
-	if err = setUserInfo(d,user); err != nil{
+	if err = setUserInfo(d, user); err != nil {
 		return fmt.Errorf("faild to set user info:%s", err.Error())
 	}
 	return nil
