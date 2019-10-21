@@ -5,7 +5,7 @@ import (
 	slackapi "github.com/nlopes/slack"
 )
 
-func setUserInfo(d *schema.ResourceData, user *slackapi.User) error{
+func setUserInfo(d *schema.ResourceData, user *slackapi.User) error {
 	d.SetId(user.ID)
 	_ = d.Set("team_id", user.TeamID)
 	_ = d.Set("name", user.Name)
