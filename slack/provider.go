@@ -5,7 +5,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/logging"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	slackapi "github.com/nlopes/slack"
+	slackapi "github.com/slack-go/slack"
 )
 
 //Provider is the root of terraform provider plugin
@@ -23,6 +23,7 @@ func Provider() terraform.ResourceProvider {
 		ResourcesMap: map[string]*schema.Resource{
 			"slack_channel":        resourceChannel(),
 			"slack_channel_invite": resourceChannelInvite(),
+			"slack_send_message":   resourceSendMessage(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"slack_user":            dataSourceUser(),

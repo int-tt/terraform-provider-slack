@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	slack "github.com/nlopes/slack"
+	slack "github.com/slack-go/slack"
 )
 
 func resourceChannelInvite() *schema.Resource {
@@ -33,7 +33,7 @@ func resourceChannelInvite() *schema.Resource {
 
 func resourceChannelInviteCreate(d *schema.ResourceData, meta interface{}) error {
 	channelID, userID := getUserAndChannelID(d)
-	_, _, err := meta.(*slack.Client).InviteUserToGroup(channelID, userID)
+	_, err := meta.(*slack.Client).InviteUsersToConversation(channelID, userID)
 	if err != nil {
 		return fmt.Errorf("faild to invite user to channel:%s", err.Error())
 	}
@@ -42,7 +42,7 @@ func resourceChannelInviteCreate(d *schema.ResourceData, meta interface{}) error
 
 func resourceChannelInviteRead(d *schema.ResourceData, meta interface{}) error {
 	channelID, userID := getUserAndChannelID(d)
-	channel, err := meta.(*slack.Client).GetGroupInfo(channelID)
+	channel, err := meta.(*slack.Client).GetConversationInfo(channelID, false)
 	if err != nil {
 		return fmt.Errorf("failed to read channel:%s", err.Error())
 	}
@@ -64,7 +64,7 @@ func resourceChannelInviteUpdate(d *schema.ResourceData, meta interface{}) error
 
 func resourceChannelInviteDelete(d *schema.ResourceData, meta interface{}) error {
 	channelID, userID := getUserAndChannelID(d)
-	err := meta.(*slack.Client).KickUserFromGroup(channelID, userID)
+	err := meta.(*slack.Client).KickUserFromConversation(channelID, userID)
 	if err != nil {
 		return fmt.Errorf("failed to kick user to channel:%s", err.Error())
 	}

@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"testing"
 
-	slackapi "github.com/nlopes/slack"
+	slackapi "github.com/slack-go/slack"
 )
 
 func TestAccSlackChannel_Basic(t *testing.T) {
@@ -54,7 +54,7 @@ func testAccCheckChannelDestroy(s *terraform.State) error {
 			continue
 		}
 		config := testAccProvider.Meta().(*slackapi.Client)
-		channel, err := config.GetChannelInfo(rs.Primary.ID)
+		channel, err := config.GetConversationInfo(rs.Primary.ID, false)
 		if err != nil {
 			return err
 		}

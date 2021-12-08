@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	slackapi "github.com/nlopes/slack"
+	slackapi "github.com/slack-go/slack"
 )
 
 func resourceChannel() *schema.Resource {
@@ -33,14 +33,14 @@ func resourceChannel() *schema.Resource {
 
 func resourceChannelCreate(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("private").(bool) {
-		channel, err := meta.(*slackapi.Client).CreateGroup(d.Get("name").(string))
+		channel, err := meta.(*slackapi.Client).CreateConversation(d.Get("name").(string), true)
 		if err != nil {
 			return fmt.Errorf("failed to create private channel: %s", err.Error())
 		}
 		d.SetId(channel.ID)
 		return resourceChannelRead(d, meta)
 	}
-	channel, err := meta.(*slackapi.Client).CreateChannel(d.Get("name").(string))
+	channel, err := meta.(*slackapi.Client).CreateConversation(d.Get("name").(string), false)
 	if err != nil {
 		return fmt.Errorf("failed to create channel: %s", err.Error())
 	}
@@ -51,7 +51,7 @@ func resourceChannelCreate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChannelRead(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("private").(bool) {
-		channel, err := meta.(*slackapi.Client).GetGroupInfo(d.Id())
+		channel, err := meta.(*slackapi.Client).GetConversationInfo(d.Id(),false)
 		if err != nil {
 			return fmt.Errorf("failed to read private channel: %s", err.Error())
 		}
@@ -63,7 +63,7 @@ func resourceChannelRead(d *schema.ResourceData, meta interface{}) error {
 		return nil
 
 	}
-	channel, err := meta.(*slackapi.Client).GetChannelInfo(d.Id())
+	channel, err := meta.(*slackapi.Client).GetConversationInfo(d.Id(), false)
 	if err != nil {
 		return fmt.Errorf("failed to read channel: %s", err.Error())
 	}
@@ -77,12 +77,12 @@ func resourceChannelRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChannelUpdate(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("private").(bool) {
-		if _, err := meta.(*slackapi.Client).RenameGroup(d.Id(), d.Get("name").(string)); err != nil {
+		if _, err := meta.(*slackapi.Client).RenameConversation(d.Id(), d.Get("name").(string)); err != nil {
 			return fmt.Errorf("failed to update channel: %s", err.Error())
 		}
 		return resourceChannelRead(d, meta)
 	}
-	if _, err := meta.(*slackapi.Client).RenameChannel(d.Id(), d.Get("name").(string)); err != nil {
+	if _, err := meta.(*slackapi.Client).RenameConversation(d.Id(), d.Get("name").(string)); err != nil {
 		return fmt.Errorf("failed to update channel: %s", err.Error())
 	}
 
@@ -91,13 +91,13 @@ func resourceChannelUpdate(d *schema.ResourceData, meta interface{}) error {
 
 func resourceChannelDelete(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("private").(bool) {
-		if err := meta.(*slackapi.Client).ArchiveGroup(d.Id()); err != nil {
+		if err := meta.(*slackapi.Client).ArchiveConversation(d.Id()); err != nil {
 			return fmt.Errorf("failed to archive channel: %s", err.Error())
 		}
 		return nil
 
 	}
-	if err := meta.(*slackapi.Client).ArchiveChannel(d.Id()); err != nil {
+	if err := meta.(*slackapi.Client).ArchiveConversation(d.Id()); err != nil {
 		return fmt.Errorf("failed to archive channel: %s", err.Error())
 	}
 	return nil
