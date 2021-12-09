@@ -5,8 +5,8 @@ build:
 	go build -v
 
 install: build
-	mkdir -p ~/.terraform.d/plugins/local/default/slack/0.0.2/darwin_amd64/
-	mv terraform-provider-slack  ~/.terraform.d/plugins/local/default/slack/0.0.2/darwin_amd64/terraform-provider-slack
+	mkdir -p ~/.terraform.d/plugins/local/default/slack/0.0.2/darwin_arm64/
+	mv terraform-provider-slack  ~/.terraform.d/plugins/local/default/slack/0.0.2/darwin_arm64/terraform-provider-slack
 
 test:
 	go test $(TEST) -timeout=30s -parallel=4 -v
