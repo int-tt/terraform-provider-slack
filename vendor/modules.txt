@@ -76,7 +76,7 @@ github.com/google/go-cmp/cmp/internal/value
 github.com/google/uuid
 # github.com/googleapis/gax-go/v2 v2.0.5
 github.com/googleapis/gax-go/v2
-# github.com/gorilla/websocket v1.4.0
+# github.com/gorilla/websocket v1.4.2
 github.com/gorilla/websocket
 # github.com/hashicorp/errwrap v1.0.0
 github.com/hashicorp/errwrap
@@ -195,20 +195,22 @@ github.com/mitchellh/go-wordwrap
 github.com/mitchellh/mapstructure
 # github.com/mitchellh/reflectwalk v1.0.1
 github.com/mitchellh/reflectwalk
-# github.com/nlopes/slack v0.6.0
-github.com/nlopes/slack
-github.com/nlopes/slack/internal/errorsx
-github.com/nlopes/slack/internal/timex
-github.com/nlopes/slack/slackutilsx
 # github.com/oklog/run v1.0.0
 github.com/oklog/run
-# github.com/pkg/errors v0.8.1
+# github.com/pkg/errors v0.9.1
 github.com/pkg/errors
 # github.com/posener/complete v1.2.1
 github.com/posener/complete
 github.com/posener/complete/cmd
 github.com/posener/complete/cmd/install
 github.com/posener/complete/match
+# github.com/slack-go/slack v0.8.1
+github.com/slack-go/slack
+github.com/slack-go/slack/internal/backoff
+github.com/slack-go/slack/internal/errorsx
+github.com/slack-go/slack/internal/misc
+github.com/slack-go/slack/internal/timex
+github.com/slack-go/slack/slackutilsx
 # github.com/spf13/afero v1.2.2
 github.com/spf13/afero
 github.com/spf13/afero/mem

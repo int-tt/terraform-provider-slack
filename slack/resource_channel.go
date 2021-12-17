@@ -2,8 +2,9 @@ package slack
 
 import (
 	"fmt"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	slackapi "github.com/nlopes/slack"
+	slackapi "github.com/slack-go/slack"
 )
 
 func resourceChannel() *schema.Resource {
@@ -21,14 +22,21 @@ func resourceChannel() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"private": {
+				Type:     schema.TypeBool,
+				Default:  false,
+				Optional: true,
+			},
 		},
 	}
 }
 
 func resourceChannelCreate(d *schema.ResourceData, meta interface{}) error {
-	channel, err := meta.(*slackapi.Client).CreateChannel(d.Get("name").(string))
+	isPrivate := d.Get("private").(bool)
+	channelName := d.Get("name").(string)
+	channel, err := meta.(*slackapi.Client).CreateConversation(channelName, isPrivate)
 	if err != nil {
-		return fmt.Errorf("failed to create channel: %s", err.Error())
+		return fmt.Errorf("failed to create channel(%s): %s", channelName, err.Error())
 	}
 	d.SetId(channel.ID)
 
@@ -36,7 +44,7 @@ func resourceChannelCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceChannelRead(d *schema.ResourceData, meta interface{}) error {
-	channel, err := meta.(*slackapi.Client).GetChannelInfo(d.Id())
+	channel, err := meta.(*slackapi.Client).GetConversationInfo(d.Id(), false)
 	if err != nil {
 		return fmt.Errorf("failed to read channel: %s", err.Error())
 	}
@@ -49,15 +57,15 @@ func resourceChannelRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceChannelUpdate(d *schema.ResourceData, meta interface{}) error {
-	if _, err := meta.(*slackapi.Client).RenameChannel(d.Id(), d.Get("name").(string)); err != nil {
-		return fmt.Errorf("faild to update channel: %s", err.Error())
+	if _, err := meta.(*slackapi.Client).RenameConversation(d.Id(), d.Get("name").(string)); err != nil {
+		return fmt.Errorf("failed to update channel: %s", err.Error())
 	}
 
 	return resourceChannelRead(d, meta)
 }
 
 func resourceChannelDelete(d *schema.ResourceData, meta interface{}) error {
-	if err := meta.(*slackapi.Client).ArchiveChannel(d.Id()); err != nil {
+	if err := meta.(*slackapi.Client).ArchiveConversation(d.Id()); err != nil {
 		return fmt.Errorf("failed to archive channel: %s", err.Error())
 	}
 	return nil
