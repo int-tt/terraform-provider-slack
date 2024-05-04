@@ -11,9 +11,9 @@ import (
 func resourceSendMessage() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceSendMessageCreate,
-		Read:   resourceChannelRead,
-		Update: resourceChannelUpdate,
-		Delete: resourceChannelDelete,
+		Read:   resourceSendMessageRead,
+		Update: resourceSendMessageUpdate,
+		Delete: resourceSendMessageDelete,
 		Schema: map[string]*schema.Schema{
 			"channel_id": {
 				Type:     schema.TypeString,
@@ -49,8 +49,16 @@ func resourceSendMessageRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
 func resourceSendMessageUpdate(d *schema.ResourceData, meta interface{}) error {
+	_, _, _, err := meta.(*slackapi.Client).UpdateMessage(d.Get("channel_id").(string), d.Get("timestamp").(string), slackapi.MsgOptionText(d.Get("text").(string), false))
+	if err != nil {
+		return fmt.Errorf("failed to edit message: %s", err.Error())
+	}
 	return nil
 }
 func resourceSendMessageDelete(d *schema.ResourceData, meta interface{}) error {
+	_, _, err := meta.(*slackapi.Client).DeleteMessage(d.Get("channel_id").(string), d.Get("timestamp").(string))
+	if err != nil {
+		return fmt.Errorf("failed to delete message: %s", err.Error())
+	}
 	return nil
 }
