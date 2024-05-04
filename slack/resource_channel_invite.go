@@ -2,9 +2,11 @@ package slack
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	slack "github.com/slack-go/slack"
+	slackapi "github.com/slack-go/slack"
 )
 
 func resourceChannelInvite() *schema.Resource {
@@ -33,28 +35,42 @@ func resourceChannelInvite() *schema.Resource {
 
 func resourceChannelInviteCreate(d *schema.ResourceData, meta interface{}) error {
 	channelID, userID := getUserAndChannelID(d)
-	_, err := meta.(*slack.Client).InviteUsersToConversation(channelID, userID)
-	if err != nil {
-		return fmt.Errorf("faild to invite user to channel:%s", err.Error())
+	for {
+		_, err := meta.(*slack.Client).InviteUsersToConversation(channelID, userID)
+		if err != nil {
+			if e, ok := err.(*slackapi.RateLimitedError); ok {
+				time.Sleep(e.RetryAfter)
+				continue
+			}
+			return fmt.Errorf("faild to invite user to channel:%s", err.Error())
+		}
+		break
 	}
 	return resourceChannelInviteRead(d, meta)
 }
 
 func resourceChannelInviteRead(d *schema.ResourceData, meta interface{}) error {
 	channelID, userID := getUserAndChannelID(d)
-	channel, err := meta.(*slack.Client).GetConversationInfo(channelID, false)
-	if err != nil {
-		return fmt.Errorf("failed to read channel:%s", err.Error())
-	}
-	isJoin := "false"
-	for _, member := range channel.Members {
-		if member == userID {
-			isJoin = "true"
-			break
+	for {
+		channel, err := meta.(*slack.Client).GetConversationInfo(channelID, false)
+		if err != nil {
+			if e, ok := err.(*slackapi.RateLimitedError); ok {
+				time.Sleep(e.RetryAfter)
+				continue
+			}
+			return fmt.Errorf("failed to read channel:%s", err.Error())
 		}
-	}
+		isJoin := "false"
+		for _, member := range channel.Members {
+			if member == userID {
+				isJoin = "true"
+				break
+			}
+		}
 
-	d.SetId(isJoin)
+		d.SetId(isJoin)
+		break
+	}
 	return nil
 }
 
@@ -64,9 +80,17 @@ func resourceChannelInviteUpdate(d *schema.ResourceData, meta interface{}) error
 
 func resourceChannelInviteDelete(d *schema.ResourceData, meta interface{}) error {
 	channelID, userID := getUserAndChannelID(d)
-	err := meta.(*slack.Client).KickUserFromConversation(channelID, userID)
-	if err != nil {
-		return fmt.Errorf("failed to kick user to channel:%s", err.Error())
+	for {
+		err := meta.(*slack.Client).KickUserFromConversation(channelID, userID)
+		if err != nil {
+			if e, ok := err.(*slackapi.RateLimitedError); ok {
+				time.Sleep(e.RetryAfter)
+				continue
+			}
+
+			return fmt.Errorf("failed to kick user to channel:%s", err.Error())
+		}
+		break
 	}
 	return resourceChannelInviteRead(d, meta)
 }

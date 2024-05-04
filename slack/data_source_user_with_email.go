@@ -2,6 +2,8 @@ package slack
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	slackapi "github.com/slack-go/slack"
 )
@@ -32,12 +34,19 @@ func dataSourceUserWithEmail() *schema.Resource {
 
 func dataSourceUserWithEmailRead(d *schema.ResourceData, meta interface{}) error {
 	userEmail := d.Get("email").(string)
-	user, err := meta.(*slackapi.Client).GetUserByEmail(userEmail)
-	if err != nil {
-		return fmt.Errorf("faild to get user(%s): %s", userEmail, err.Error())
-	}
-	if err = setUserInfo(d, user); err != nil {
-		return fmt.Errorf("faild to set user info:%s", err.Error())
+	for {
+		user, err := meta.(*slackapi.Client).GetUserByEmail(userEmail)
+		if err != nil {
+			if e, ok := err.(*slackapi.RateLimitedError); ok {
+				time.Sleep(e.RetryAfter)
+				continue
+			}
+			return fmt.Errorf("faild to get user(%s): %s", userEmail, err.Error())
+		}
+		if err = setUserInfo(d, user); err != nil {
+			return fmt.Errorf("faild to set user info:%s", err.Error())
+		}
+		break
 	}
 	return nil
 }
