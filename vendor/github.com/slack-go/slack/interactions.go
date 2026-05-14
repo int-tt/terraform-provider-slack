@@ -3,17 +3,19 @@ package slack
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"net/http"
 )
 
 // InteractionType type of interactions
 type InteractionType string
 
 // ActionType type represents the type of action (attachment, block, etc.)
-type actionType string
+type ActionType string
 
 // action is an interface that should be implemented by all callback action types
 type action interface {
-	actionType() actionType
+	actionType() ActionType
 }
 
 // Types of interactions that can be received.
@@ -28,31 +30,34 @@ const (
 	InteractionTypeViewSubmission     = InteractionType("view_submission")
 	InteractionTypeViewClosed         = InteractionType("view_closed")
 	InteractionTypeShortcut           = InteractionType("shortcut")
+	InteractionTypeWorkflowStepEdit   = InteractionType("workflow_step_edit")
 )
 
 // InteractionCallback is sent from slack when a user interactions with a button or dialog.
 type InteractionCallback struct {
-	Type            InteractionType `json:"type"`
-	Token           string          `json:"token"`
-	CallbackID      string          `json:"callback_id"`
-	ResponseURL     string          `json:"response_url"`
-	TriggerID       string          `json:"trigger_id"`
-	ActionTs        string          `json:"action_ts"`
-	Team            Team            `json:"team"`
-	Channel         Channel         `json:"channel"`
-	User            User            `json:"user"`
-	OriginalMessage Message         `json:"original_message"`
-	Message         Message         `json:"message"`
-	Name            string          `json:"name"`
-	Value           string          `json:"value"`
-	MessageTs       string          `json:"message_ts"`
-	AttachmentID    string          `json:"attachment_id"`
-	ActionCallback  ActionCallbacks `json:"actions"`
-	View            View            `json:"view"`
-	ActionID        string          `json:"action_id"`
-	APIAppID        string          `json:"api_app_id"`
-	BlockID         string          `json:"block_id"`
-	Container       Container       `json:"container"`
+	Type                InteractionType `json:"type"`
+	Token               string          `json:"token"`
+	CallbackID          string          `json:"callback_id"`
+	ResponseURL         string          `json:"response_url"`
+	TriggerID           string          `json:"trigger_id"`
+	ActionTs            string          `json:"action_ts"`
+	Team                Team            `json:"team"`
+	Channel             Channel         `json:"channel"`
+	User                User            `json:"user"`
+	OriginalMessage     Message         `json:"original_message"`
+	Message             Message         `json:"message"`
+	Name                string          `json:"name"`
+	Value               string          `json:"value"`
+	MessageTs           string          `json:"message_ts"`
+	AttachmentID        string          `json:"attachment_id"`
+	ActionCallback      ActionCallbacks `json:"actions"`
+	View                View            `json:"view"`
+	ActionID            string          `json:"action_id"`
+	APIAppID            string          `json:"api_app_id"`
+	BlockID             string          `json:"block_id"`
+	Container           Container       `json:"container"`
+	Enterprise          Enterprise      `json:"enterprise"`
+	IsEnterpriseInstall bool            `json:"is_enterprise_install"`
 	DialogSubmissionCallback
 	ViewSubmissionCallback
 	ViewClosedCallback
@@ -69,6 +74,24 @@ type InteractionCallback struct {
 
 type BlockActionStates struct {
 	Values map[string]map[string]BlockAction `json:"values"`
+}
+
+// InteractionCallbackParse parses the HTTP form value "payload" from r, unmarshals
+// it as JSON into an InteractionCallback, and returns the result.
+// It returns an error if the payload is missing or cannot be decoded.
+//
+// See https://github.com/slack-go/slack/issues/660 for context.
+func InteractionCallbackParse(r *http.Request) (InteractionCallback, error) {
+	payload := r.FormValue("payload")
+	if len(payload) == 0 {
+		return InteractionCallback{}, errors.New("payload is empty")
+	}
+
+	var ic InteractionCallback
+	if err := json.Unmarshal([]byte(payload), &ic); err != nil {
+		return InteractionCallback{}, err
+	}
+	return ic, nil
 }
 
 func (ic *InteractionCallback) MarshalJSON() ([]byte, error) {
@@ -121,10 +144,16 @@ type Container struct {
 	Type         string      `json:"type"`
 	ViewID       string      `json:"view_id"`
 	MessageTs    string      `json:"message_ts"`
+	ThreadTs     string      `json:"thread_ts,omitempty"`
 	AttachmentID json.Number `json:"attachment_id"`
 	ChannelID    string      `json:"channel_id"`
 	IsEphemeral  bool        `json:"is_ephemeral"`
 	IsAppUnfurl  bool        `json:"is_app_unfurl"`
+}
+
+type Enterprise struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 // ActionCallback is a convenience struct defined to allow dynamic unmarshalling of
